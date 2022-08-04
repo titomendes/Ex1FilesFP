@@ -1,10 +1,9 @@
 # depslib dependency file v1.0
-1659286788 source:c:\users\tito_\onedrive\documentos\codeblocks workspace\ex1filesfp\main.c
+1659587854 source:c:\users\tito_\onedrive\documentos\codeblocks workspace\ex1filesfp\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 	<stdbool.h>
-	"Funções.h"
 
 1659075433 c:\users\tito_\onedrive\documentos\codeblocks workspace\ex1filesfp\funções.h
 
