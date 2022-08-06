@@ -116,11 +116,11 @@ void inserirAlunos(Alunos *aluno)
         }
         getchar();
         printf("Nome do aluno:");
-        scanf("%s",aluno->nome);
+        fgets(aluno->nome,sizeof(aluno->nome),stdin);
         for(int i=0;i<strlen(aluno->nome);i++){
-            if((aluno->nome[i])=='.')
+            if(aluno->nome[i]=='\n')
             {
-                aluno->nome[i]=' ';
+                aluno->nome[i]='\0';
             }
         }
         printf("Nota1 do aluno: ");
@@ -129,14 +129,13 @@ void inserirAlunos(Alunos *aluno)
         scanf("%d",&aluno->nota2);
         getchar();
         printf("Curso do aluno: ");
-        scanf("%s",aluno->curso);
-        for(int i=0;i<strlen(aluno->curso);i++){
-            if((aluno->curso[i])=='.')
+        fgets(aluno->curso,sizeof(aluno->curso),stdin);
+        for(int i=0;i<strlen(aluno->nome);i++){
+            if(aluno->curso[i]=='\n')
             {
-                aluno->curso[i]=' ';
+                aluno->curso[i]='\0';
             }
         }
-        fflush(stdin);
         fprintf(p,formatOut,aluno->nome,aluno->num,aluno->curso,aluno->nota1,aluno->nota2);
         fclose(p);
         free(aluno);
