@@ -23,6 +23,8 @@ void inserirAlunos(Alunos *aluno);
 void mudaNota(Alunos *aluno);
 void sairJanela(Alunos *aluno);
 void menuClose();
+void verAlunos(Alunos *aluno);
+void alunosCurso(Alunos *aluno);
 
 
 int main()
@@ -37,7 +39,9 @@ void menu(Alunos *aluno)
 {
     printf("Inserir aluno: opcao 1");
     printf("\nMudar detalhes: opcao 2");
-    printf("\nApagar contas: opcao 3\n");
+    printf("\nApagar contas: opcao 3");
+    printf("\nVer Alunos e media de notas: opcao 4");
+    printf("\nAlunos por curso: opcao 5\n");
 
     int opcao;
     scanf("%d",&opcao);
@@ -54,6 +58,11 @@ void menu(Alunos *aluno)
         case 3:
             apagarAluno(aluno);
             break;
+        case 4:
+            verAlunos(aluno);
+
+        case 5:
+            alunosCurso(aluno);
     }
 }
 
@@ -290,7 +299,6 @@ void apagarAluno(Alunos *aluno){
     int pos=6;
     while(!feof(p)){
         fgets(temp,sizeof(temp),p);
-        cont--;
         pos--;
         if(cont==0)
             continue;
@@ -302,7 +310,45 @@ void apagarAluno(Alunos *aluno){
     fclose(tempo);
     remove("Alunos.dat");
     rename("temp_Alunos.dat","Alunos.dat");
+    sairJanela(aluno);
+}
 
+void verAlunos(Alunos *aluno){
+    FILE *p;
+    p= fopen("Alunos.dat","r+");
+    int media;
+    if(p==NULL)
+        perror("Erro, arquivo nao aberto");
+    if(p==NULL)
+        perror("Erro, arquivo nao aberto");
+    while(!feof(p)){
+        fscanf(p,formatIn,&aluno->num,aluno->nome,aluno->curso,&aluno->nota1,&aluno->nota2);
+        media=(aluno->nota1+aluno->nota2)/2;
+        printf("Numero: %d\nCurso: %s\nNome: %s\nMedia:%d\n\n",aluno->num,aluno->curso,aluno->nome,media);
+    }
+    printf("-----------------------------\n");
+    printf("Numero de alunos aprovados:\n");
+    rewind(p);
+    while(!feof(p)){
+         fscanf(p,formatIn,&aluno->num,aluno->nome,aluno->curso,&aluno->nota1,&aluno->nota2);
+         media=(aluno->nota1+aluno->nota2)/2;
+         if(media>=10)
+         printf("Numero: %d\nCurso: %s\nNome: %s\nMedia:%d\nAluno aprovado\n\n",aluno->num,aluno->curso,aluno->nome,media);
+    }
+    printf("-----------------------------\n");
+    printf("Numero de alunos reprovados:\n");
+    rewind(p);
+    bool flag;
+    while(!feof(p)){
+         fscanf(p,formatIn,&aluno->num,aluno->nome,aluno->curso,&aluno->nota1,&aluno->nota2);
+         media=(aluno->nota1+aluno->nota2)/2;
+         if(media<=10 && media >=3 && media <=7)
+         printf("Numero: %d\nCurso: %s\nNome: %s\nMedia:%d\nAluno em exame\n\n",aluno->num,aluno->curso,aluno->nome,media);
+         if(media<=10)
+            printf("Numero: %d\nCurso: %s\nNome: %s\nMedia:%d\nAluno reprovado\n\n",aluno->num,aluno->curso,aluno->nome,media);
+    }
+
+    sairJanela(aluno);
 }
 
 void sairJanela(Alunos *aluno){
@@ -314,6 +360,38 @@ void sairJanela(Alunos *aluno){
         menu(aluno);
     else
         menuClose();
+}
+
+void alunosCurso(Alunos *aluno){
+    FILE *p;
+    p=fopen("Alunos.dat","r+");
+    if(p==NULL)
+        perror("Erro, arquivo nao aberto");
+    if(p==NULL)
+        perror("Erro, arquivo nao aberto");
+
+    char curso[30];
+    bool cmp;
+    fflush(stdin);
+    printf("Curso:");
+    fgets(curso,sizeof(curso),stdin);
+    int result;
+    while(!feof(p)){
+        fscanf(p,formatIn,&aluno->num,aluno->nome,aluno->curso,&aluno->nota1,&aluno->nota2);
+       for(int i=0;i<strlen(curso)-1;i++){
+            if(aluno->curso[i]!=curso[i]){
+                cmp=false;
+                break;
+            }
+            else
+                cmp=true;
+        }
+        if(cmp)
+            printf("%s\n %d\n",aluno->nome,aluno->num);
+    }
+    free(aluno);
+    fclose(p);
+    sairJanela(aluno);
 }
 
 void menuClose(){
